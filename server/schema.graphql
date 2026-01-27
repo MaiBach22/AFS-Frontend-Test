@@ -1,0 +1,89 @@
+interface Node {
+  id: ID!
+}
+
+type Account implements Node {
+  id: ID!
+  username: String!
+  email: String!
+  firstName: String
+  lastName: String
+}
+
+type ClientCompany implements Node {
+  _id: String
+  id: ID!
+  name: String!
+  primaryContact: String
+  status: String!
+}
+
+type Trade implements Node {
+  _id: String
+  amount: Int!
+  clientCompany: ClientCompany!
+  commodity: String!
+  complianceYear: Int
+  counterparty: String!
+  createdAt: String!
+  createdBy: Account!
+  dealDate: String!
+  deliveryDate: String
+  id: ID!
+  price: Float!
+  type: String!
+  updatedAt: String!
+  updatedBy: Account!
+}
+
+type Query {
+  # ClientCompany queries
+  clientCompanies: [ClientCompany!]!
+  clientCompany(id: ID!): ClientCompany
+
+  # Trade queries
+  trades: [Trade!]!
+  trade(id: ID!): Trade
+}
+
+input ClientCompanyInput {
+  name: String!
+  primaryContact: String
+  status: String!
+}
+
+input TradeInput {
+  amount: Int!
+  clientCompanyId: ID!
+  commodity: String!
+  complianceYear: Int
+  counterparty: String!
+  dealDate: String!
+  deliveryDate: String
+  price: Float!
+  type: String!
+}
+
+input TradeUpdateInput {
+  amount: Int
+  clientCompanyId: ID
+  commodity: String
+  complianceYear: Int
+  counterparty: String
+  dealDate: String
+  deliveryDate: String
+  price: Float
+  type: String
+}
+
+type Mutation {
+  # ClientCompany mutations
+  createClientCompany(input: ClientCompanyInput!): ClientCompany!
+  updateClientCompany(id: ID!, input: ClientCompanyInput!): ClientCompany!
+  deleteClientCompany(id: ID!): Boolean!
+
+  # Trade mutations
+  createTrade(input: TradeInput!): Trade!
+  updateTrade(id: ID!, input: TradeUpdateInput!): Trade!
+  deleteTrade(id: ID!): Boolean!
+}
