@@ -3,6 +3,7 @@ import { computed, onMounted, ref } from 'vue'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 import ColumnGroup from 'primevue/columngroup'
+import InputNumber from 'primevue/inputnumber'
 import { Row } from 'primevue'
 
 interface Fruit {
@@ -15,9 +16,9 @@ interface Fruit {
   price: number
 }
 
-type Totals = Pick<Fruit, 'calories' | 'sugar' | 'price' >
+type Totals = Pick<Fruit, 'calories' | 'sugar' | 'price'>
 
-const fruits : Fruit[] = [
+const fruits = ref<Fruit[]>([
   {
     id: '1',
     name: 'Apple',
@@ -108,12 +109,13 @@ const fruits : Fruit[] = [
     sugar: 16.1,
     price: 2.99,
   },
-]
+])
 
 const dt = ref()
 onMounted(() => {
   console.log(dt.value)
 })
+
 
 const pageTotals = computed(() => {
   if (!dt.value) {
@@ -147,7 +149,18 @@ const pageTotals = computed(() => {
         <template #body="slotProps"> {{ slotProps.data.calories }} kcal </template>
       </Column>
       <Column field="sugar" header="Sugar">
-        <template #body="slotProps"> {{ slotProps.data.sugar }}g </template>
+        <template #body="slotProps">
+          <InputNumber
+            v-model="slotProps.data.sugar"
+            :minFractionDigits="1"
+            :maxFractionDigits="1"
+            :min="0"
+            mode="decimal"
+            :invalid="slotProps.data.sugar === null"
+            showButtons
+          />
+          <span class="unit">g</span>
+        </template>
       </Column>
       <Column field="price" header="Price">
         <template #body="slotProps"> ${{ slotProps.data.price.toFixed(2) }} </template>
@@ -180,5 +193,21 @@ const pageTotals = computed(() => {
 .error {
   background-color: #fff0f0;
   color: #cc0000;
+}
+
+.sugar-input {
+  width: 70px;
+  padding: 4px 8px;
+  border: 1px solid var(--color-background-mute);
+  border-radius: 4px;
+  text-align: right;
+  transition: border-color 0.2s;
+  &:focus {
+    border-color: var(--color-background-soft);
+    outline: none;
+  }
+}
+.unit {
+  margin-left: 10px;
 }
 </style>
