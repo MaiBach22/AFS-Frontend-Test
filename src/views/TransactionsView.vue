@@ -1,17 +1,13 @@
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+import Card from '@/components/Card.vue'
 
-export default defineComponent({
-  name: 'TransactionsView',
-  setup() {
-    return {}
-  },
-})
+
+
 </script>
 
 <template>
   <div class="transactions">
-    <h1>Transactions</h1>
+    <Card />
   </div>
 </template>
 
