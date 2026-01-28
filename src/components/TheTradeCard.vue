@@ -33,6 +33,7 @@ const formatDate = (dateString: string) => {
         </div>
 
         <Tag
+          class="status-tag"
           :value="trade.clientCompany.status"
           :severity="trade.clientCompany.status.toLowerCase() === 'active' ? 'success' : 'danger'"
         />
@@ -50,7 +51,7 @@ const formatDate = (dateString: string) => {
             </div>
             <div class="info">
               <label>Commodity Origin</label>
-              <p>{{ trade.commodity }} warehouse</p>
+              <p>{{ trade.commodity }} Warehouse</p>
             </div>
           </div>
 
@@ -155,6 +156,10 @@ const formatDate = (dateString: string) => {
   .order-id {
     color: var(--color-text);
   }
+
+  .status-tag {
+    text-transform: capitalize;
+  }
 }
 
 .tracking-section {
@@ -248,7 +253,7 @@ const formatDate = (dateString: string) => {
 
 .info-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 2fr 1fr;
   gap: 20px;
   padding: 1rem 0;
 
@@ -259,7 +264,7 @@ const formatDate = (dateString: string) => {
       color: var(--color-text);
     }
     strong {
-      font-size: 0.95rem;
+      text-transform: capitalize;
     }
 
     &.client {

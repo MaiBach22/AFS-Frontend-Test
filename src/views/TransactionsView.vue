@@ -34,7 +34,9 @@ onResult((response) => {
 
 <template>
   <div class="transactions">
-    <div v-if="loading">Loading trades...</div>
+    <div v-if="loading">
+      <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>Loading trades...
+    </div>
     <div v-else-if="error">{{ error.message }}</div>
     <div v-else class="trade-grid-container">
       <TheTradeCard v-for="item in trades" :key="item.id" :trade="item" />
@@ -45,10 +47,9 @@ onResult((response) => {
 <style scoped lang="scss">
 .trade-grid-container {
   display: grid;
-  grid-template-columns: repeat(1, 1fr); 
+  grid-template-columns: repeat(1, 1fr);
   gap: 20px;
   align-items: stretch;
-
 
   @media (min-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
