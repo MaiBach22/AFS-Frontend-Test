@@ -1,5 +1,24 @@
 <script setup lang="ts">
 import { Tag, Card, Divider, Avatar, Button } from 'primevue'
+
+defineProps<{
+  trade: {
+    id: string
+    amount: number
+    commodity: string
+    counterparty: string
+    dealDate: string
+    type: string
+    clientCompany: {
+      name: string
+      status: string
+    }
+  }
+}>()
+
+const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString('en-GB')
+}
 </script>
 
 <template>
@@ -10,10 +29,13 @@ import { Tag, Card, Divider, Avatar, Button } from 'primevue'
           <div class="icon-box">
             <i class="pi pi-id-card" style="color: var(--color-text)"></i>
           </div>
-          <span class="order-id">#idorder</span>
+          <span class="order-id">#{{ trade.id }}</span>
         </div>
 
-        <Tag value="Delivered" severity="success" />
+        <Tag
+          :value="trade.clientCompany.status"
+          :severity="trade.clientCompany.status.toLowerCase() === 'active' ? 'success' : 'danger'"
+        />
       </div>
       <Divider />
     </template>
@@ -27,8 +49,8 @@ import { Tag, Card, Divider, Avatar, Button } from 'primevue'
               <div class="line"></div>
             </div>
             <div class="info">
-              <label>Current location</label>
-              <p>123123123</p>
+              <label>Commodity Origin</label>
+              <p>{{ trade.commodity }} warehouse</p>
             </div>
           </div>
 
@@ -47,8 +69,8 @@ import { Tag, Card, Divider, Avatar, Button } from 'primevue'
               </div>
             </div>
             <div class="info">
-              <label>Arrival</label>
-              <p>1234678567</p>
+              <label>Arrival Destination</label>
+              <p>{{ trade.counterparty }}</p>
             </div>
           </div>
         </div>
@@ -69,21 +91,21 @@ import { Tag, Card, Divider, Avatar, Button } from 'primevue'
           />
           <div class="client-name">
             <label>Client name</label>
-            <strong>Mai is cute</strong>
+            <strong>{{ trade.clientCompany.name }}</strong>
           </div>
         </div>
 
         <div class="info-item">
-          <label>Total time</label>
-          <strong>2 days, 1 night</strong>
+          <label>Total Volume</label>
+          <strong>{{ trade.amount }} Units</strong>
         </div>
         <div class="info-item">
-          <label>Departure time</label>
-          <strong>28/01/2026 2:11PM</strong>
+          <label>Deal date</label>
+          <strong>{{ formatDate(trade.dealDate) }}</strong>
         </div>
         <div class="info-item">
-          <label>Arrival time</label>
-          <strong>28/01/2026 10:14PM</strong>
+          <label>Trade type</label>
+          <strong>{{ trade.type }}</strong>
         </div>
       </div>
     </template>
@@ -97,6 +119,7 @@ import { Tag, Card, Divider, Avatar, Button } from 'primevue'
 <style scoped lang="scss">
 .tracking-card {
   width: 100%;
+  height: 100%;
   max-width: 450px;
   box-shadow: 0 6px 13px -1px var(--color-background-mute);
 
