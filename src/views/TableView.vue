@@ -116,7 +116,6 @@ onMounted(() => {
   console.log(dt.value)
 })
 
-
 const pageTotals = computed(() => {
   if (!dt.value) {
     return { calories: 0, sugar: 0, price: 0 }
@@ -158,6 +157,7 @@ const pageTotals = computed(() => {
             mode="decimal"
             :invalid="slotProps.data.sugar === null"
             showButtons
+            @update:modelValue="(val) => (slotProps.data.sugar = val === null ? 0 : val)"
           />
           <span class="unit">g</span>
         </template>
@@ -209,5 +209,10 @@ const pageTotals = computed(() => {
 }
 .unit {
   margin-left: 10px;
+}
+.home {
+  :deep(.p-inputnumber-input) {
+    width: 6rem;
+  }
 }
 </style>

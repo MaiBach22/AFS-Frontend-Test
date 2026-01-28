@@ -127,9 +127,6 @@ const formatDate = (dateString: string) => {
   :deep(.p-card-body) {
     padding: 1.5rem;
   }
-  :deep(.p-card-content) {
-    padding: 0;
-  }
 }
 
 .header-section {
