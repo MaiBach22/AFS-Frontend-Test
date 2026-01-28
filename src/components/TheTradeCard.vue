@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { Tag, Card, Divider, Avatar, Button } from 'primevue'
+import { Tag, Card, Divider, Avatar, Button, Timeline } from 'primevue'
+import { computed } from 'vue'
 
-defineProps<{
+const props = defineProps<{
   trade: {
     id: string
     amount: number
@@ -19,6 +20,26 @@ defineProps<{
 const formatDate = (dateString: string) => {
   return new Date(dateString).toLocaleDateString('en-GB')
 }
+
+const timelineEvents = computed(() => [
+  {
+    label: 'Origin',
+    value: `${props.trade.commodity} Warehouse`,
+    type: 'current',
+  },
+  {
+    label: '',
+    value: '',
+    icon: 'pi pi-circle-fill',
+    type: 'middle',
+  },
+  {
+    label: 'Destination',
+    value: `${props.trade.counterparty} Terminal`,
+    icon: 'pi pi-map-marker',
+    type: 'arrival',
+  },
+])
 </script>
 
 <template>
@@ -43,7 +64,7 @@ const formatDate = (dateString: string) => {
 
     <template #content>
       <div class="tracking-section">
-        <div class="timeline">
+        <!-- <div class="timeline">
           <div class="timeline-item">
             <div class="dot-container">
               <div class="dot current"></div>
@@ -74,7 +95,31 @@ const formatDate = (dateString: string) => {
               <p>{{ trade.counterparty }}</p>
             </div>
           </div>
-        </div>
+        </div> -->
+
+        <Timeline :value="timelineEvents" class="customized-timeline">
+          <template #marker="slotProps">
+            <span v-if="slotProps.item.type === 'middle'" class="middle-dot-wrapper">
+              <span class="middle-dot"></span>
+            </span>
+
+            <span v-else class="marker-container">
+              <div class="dot-wrapper">
+                <div v-if="slotProps.item.type === 'current'" class="dot-circle"></div>
+                <div v-else class="icon-wrapper">
+                  <i class="pi pi-map-marker" style="font-size: 12px"></i>
+                </div>
+              </div>
+            </span>
+          </template>
+
+          <template #content="slotProps">
+            <div v-if="slotProps.item.label" class="info-content">
+              <label>{{ slotProps.item.label }}</label>
+              <p>{{ slotProps.item.value }}</p>
+            </div>
+          </template>
+        </Timeline>
 
         <div class="map-thumbnail">
           <img width="80" src="../assets/afs-energy-logo-custom.png" alt="map" />
@@ -162,7 +207,7 @@ const formatDate = (dateString: string) => {
 .tracking-section {
   display: flex;
   justify-content: space-between;
-  padding: 1.5rem 0;
+  // padding: 1.5rem 0;
 
   .timeline {
     display: flex;
@@ -244,6 +289,89 @@ const formatDate = (dateString: string) => {
     .map-thumb img {
       border-radius: 12px;
       object-fit: cover;
+    }
+  }
+
+  .customized-timeline {
+    :deep(.p-timeline-event-content) {
+      padding: 0 0 1rem 1rem;
+    }
+    :deep(.p-timeline-event:first-child) {
+      min-height: 30px;
+
+      .p-timeline-event-content {
+        padding-bottom: 0;
+      }
+
+      .p-timeline-event-connector {
+        height: 20px;
+      }
+    }
+    :deep(.p-timeline-event:nth-child(2)) {
+      min-height: 30px;
+    }
+    :deep(.p-timeline-event-opposite) {
+      display: none;
+    }
+
+    .marker-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+      border-radius: 50%;
+      color: hsla(160, 100%, 37%, 1);
+
+      .dot-wrapper {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        border: 2px solid var(--color-border);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .dot-circle {
+          background-color: hsla(160, 100%, 37%, 1);
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+        }
+        .icon-wrapper {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+      }
+    }
+
+    .middle-dot-wrapper {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .middle-dot {
+        width: 12px;
+        height: 12px;
+        background: var(--vt-c-white);
+        border: 3px solid hsla(160, 100%, 37%, 1);
+        border-radius: 50%;
+        z-index: 1;
+      }
+    }
+
+    .info-content {
+      label {
+        display: block;
+        font-size: 0.75rem;
+        color: var(--color-text);
+        font-weight: 600;
+      }
+      p {
+        margin: 0;
+        font-size: 0.9rem;
+        font-weight: 700;
+      }
     }
   }
 }
