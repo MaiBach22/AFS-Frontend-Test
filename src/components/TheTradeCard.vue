@@ -77,7 +77,7 @@ const formatDate = (dateString: string) => {
         </div>
 
         <div class="map-thumbnail">
-          <img width="80" src="../assets/logo.svg" alt="map" />
+          <img width="80" src="../assets/afs-energy-logo-custom.png" alt="map" />
         </div>
       </div>
 
