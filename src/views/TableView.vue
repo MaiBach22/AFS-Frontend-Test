@@ -3,7 +3,6 @@ import { computed, onMounted, ref } from 'vue'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 import ColumnGroup from 'primevue/columngroup'
-import InputNumber from 'primevue/inputnumber'
 import { Row } from 'primevue'
 
 interface Fruit {
@@ -134,6 +133,12 @@ const pageTotals = computed(() => {
     { calories: 0, sugar: 0, price: 0 } as Totals,
   )
 })
+
+const handleSugarInput = (event: Event, row: Fruit) => {
+  const target = event.target as HTMLInputElement
+  const val = parseFloat(target.value)
+  row.sugar = isNaN(val) ? 0 : val
+}
 </script>
 
 <template>
@@ -149,15 +154,14 @@ const pageTotals = computed(() => {
       </Column>
       <Column field="sugar" header="Sugar">
         <template #body="slotProps">
-          <InputNumber
-            v-model="slotProps.data.sugar"
-            :minFractionDigits="1"
-            :maxFractionDigits="1"
-            :min="0"
-            mode="decimal"
-            :invalid="slotProps.data.sugar === null"
-            showButtons
-            @update:modelValue="(val) => (slotProps.data.sugar = val === null ? 0 : val)"
+          <input
+            class="sugar-input"
+            type="number"
+            :value="slotProps.data.sugar"
+            step="0.1"
+            min="0"
+            :class="{ 'is-invalid': slotProps.data.sugar === null }"
+            @input="(e) => handleSugarInput(e, slotProps.data)"
           />
           <span class="unit">g</span>
         </template>
@@ -200,7 +204,7 @@ const pageTotals = computed(() => {
   padding: 4px 8px;
   border: 1px solid var(--color-background-mute);
   border-radius: 4px;
-  text-align: right;
+  text-align: center;
   transition: border-color 0.2s;
   &:focus {
     border-color: var(--color-background-soft);
@@ -209,10 +213,5 @@ const pageTotals = computed(() => {
 }
 .unit {
   margin-left: 10px;
-}
-.home {
-  :deep(.p-inputnumber-input) {
-    width: 6rem;
-  }
 }
 </style>
