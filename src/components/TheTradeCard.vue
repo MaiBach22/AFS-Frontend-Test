@@ -1,20 +1,11 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import type { Trades } from '@/views/TransactionsView.vue'
 
 const props = defineProps<{
-  trade: {
-    id: string
-    amount: number
-    commodity: string
-    counterparty: string
-    dealDate: string
-    type: string
-    clientCompany: {
-      name: string
-      status: string
-    }
-  }
+  trade: Trades
 }>()
+
+defineEmits<{ (e: 'delete', id: string): void }>()
 
 const formatDate = (dateString: string) => {
   return new Date(dateString).toLocaleDateString('en-GB')
@@ -36,7 +27,7 @@ const formatDate = (dateString: string) => {
           <span :class="['status-badge', trade.clientCompany.status.toLowerCase()]">
             {{ trade.clientCompany.status }}
           </span>
-          <button class="delete-icon-btn">
+          <button class="delete-icon-btn" @click="$emit('delete', trade.id)">
             <i class="pi pi-trash" style="font-size: 1rem"></i>
           </button>
         </div>
@@ -189,7 +180,7 @@ const formatDate = (dateString: string) => {
       .delete-icon-btn {
         background: none;
         border: none;
-        color: #94a3b8;
+        color: var(--color-text);
         cursor: pointer;
 
         &:hover {
